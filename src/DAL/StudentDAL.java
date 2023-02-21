@@ -33,7 +33,22 @@ public class StudentDAL {
         return list;
     }
     
+    public boolean isValidtoAdd(Student sv){
+       try{
+           ArrayList<Student> arr = docSV();
+           for (int i = 0; i < arr.size(); i++) {
+               if(arr.get(i).getMasv().equals(sv.getMasv())){
+                JOptionPane.showMessageDialog(null,"Mã Sinh viên đã tồn tại");
+                return false;}
+               else return true;}
+        }catch(Exception e){
+            return true;
+        }
+    return true;        
+    }
+    
     public int themSV(Student sv){
+        if(isValidtoAdd(sv)){
         int res = 0;
         try{
                 String qry = "insert into person values(";
@@ -47,6 +62,8 @@ public class StudentDAL {
                 JOptionPane.showMessageDialog(null,"Lỗi thêm Sinh viên vào Database");
             }
         return res;
+        }
+        return 0;
     }
     public int suaSV(Student sv){
         int res = 0;
@@ -59,7 +76,7 @@ public class StudentDAL {
             qry = qry +" where PersonID ='"+sv.getMasv()+"'";
             res = my.executeUpdate(qry);
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null,"Lỗi sửa khách hàng Database");
+            JOptionPane.showMessageDialog(null,"Lỗi sửa Sinh viên trong Database");
         }
         return res;
     }

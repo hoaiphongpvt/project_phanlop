@@ -13,7 +13,6 @@ import java.text.SimpleDateFormat;
 import javax.swing.table.DefaultTableModel;
 
 public class AddStudent extends JFrame implements ActionListener{
-    DefaultTableModel model = new DefaultTableModel();
     StudentBUS bus = new StudentBUS();
     
     JTextField fname, lname;

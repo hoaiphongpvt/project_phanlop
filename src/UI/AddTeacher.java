@@ -1,5 +1,7 @@
 package UI;
 
+import BLL.Teacher;
+import BUS.TeacherBUS;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
@@ -8,6 +10,8 @@ import java.awt.event.*;
 import java.sql.ResultSet;
 
 public class AddTeacher extends JFrame implements ActionListener{
+            TeacherBUS bus = new TeacherBUS();
+
     
             JTextField tfname, fname;
             JLabel labelempId;
@@ -16,6 +20,26 @@ public class AddTeacher extends JFrame implements ActionListener{
 
             Random ran = new Random();
             long first4 = Math.abs((ran.nextLong() % 9000L) + 1000L);
+            
+            public Teacher getText() {
+                Teacher tc = new Teacher();
+                tc.setTeacherid(labelempId.getText().trim());
+                tc.setName(tfname.getText().trim());
+                tc.setFname(fname.getText().trim());
+                tc.setCourseid(ccourse.getSelectedItem());
+                tc.setDepartid(cdepartment.getSelectedItem());
+                return tc;
+            }
+
+            private Vector setVector(Teacher sv){
+                    Vector head = new Vector();
+                    head.add(sv.getTeacherid());
+                    head.add(sv.getName());
+                    head.add(sv.getFname());
+                    head.add(sv.getCourseid());
+                    head.add(sv.getDepartid());
+                    return head;
+            }    
     
         AddTeacher() {
         
@@ -116,24 +140,15 @@ public class AddTeacher extends JFrame implements ActionListener{
     
     public void actionPerformed(ActionEvent ae) {
         if (ae.getSource() == submit) {
-            String name = tfname.getText();
-            String fname = this.fname.getText();
-            String rollno = labelempId.getText();
-            String course = (String) ccourse.getSelectedItem();
-            String depart = (String) cdepartment.getSelectedItem();
-            
-            try {
-                String query = "insert into teacher values('"+name+"', '"+fname+"', '"+rollno+"', '"+course+"', '"+depart+"')";
-
-                Conn con = new Conn();
-                con.s.executeUpdate(query);
-                
-                JOptionPane.showMessageDialog(null, "Teacher Details Inserted Successfully");
+            Teacher tc = getText();
+            Vector head = setVector(tc);
+            int check = bus.themTC(tc);
+            if(check == 1){ 
+                JOptionPane.showMessageDialog(null, "Thêm thành công");
                 setVisible(false);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
+                }else{JOptionPane.showMessageDialog(null, "Thêm thất bại");
+                setVisible(false);
+            }}else { 
             setVisible(false);
         }
     }
