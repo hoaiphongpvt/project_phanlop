@@ -139,7 +139,9 @@ public class AddStudent extends JFrame implements ActionListener{
                 setVisible(false);
                 }else{JOptionPane.showMessageDialog(null, "Mã đã tồn tại. Thêm thất bại");
                 setVisible(false);
-            }}
+            }}else { 
+            setVisible(false);
+        }
     }
     
     public static void main(String[] args) {
