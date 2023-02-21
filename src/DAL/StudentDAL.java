@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import untils.MyDataAccess;
 
 public class StudentDAL {
-    MyDataAccess my = new MyDataAccess("localhost","root","","school1");
+    MyDataAccess my = new MyDataAccess("localhost","root","","school");
     public StudentDAL(){}
     public ArrayList<Student> docSV() throws Exception{
         ArrayList<Student> list = new ArrayList<Student>();

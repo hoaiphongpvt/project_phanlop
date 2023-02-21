@@ -14,7 +14,7 @@ public class Conn {
         host = "localhost";
         port = "3306";
         dbUser = "root";
-        dbName = "school1";
+        dbName = "school";
         dbPassword = "";
         String dbPath = "jdbc:mysql://" + host + ":" + port + "/"
                 + dbName + "?useUnicode=yes&characterEncoding=UTF-8";
