@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class TeacherBUS {
     public static ArrayList<Teacher> list;    
     public TeacherBUS(){}
-    public ArrayList<Teacher> docKh(){
+    public ArrayList<Teacher> docTC(){
         TeacherDAL data = new TeacherDAL();
         try{
             list = new ArrayList<Teacher>();
@@ -18,6 +18,18 @@ public class TeacherBUS {
         }
         return list;
     }
+    
+    public ArrayList<Teacher> docID(){
+        TeacherDAL data = new TeacherDAL();
+        try{
+            list = new ArrayList<Teacher>();
+            list = data.docID();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return list;
+    }
+   
     public int themTC(Teacher tc){
         TeacherDAL data = new TeacherDAL();
         int check = data.themGV(tc);

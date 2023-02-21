@@ -33,6 +33,25 @@ public class TeacherDAL {
         return list;
     }
     
+    public ArrayList<Teacher> docID() throws Exception{
+        ArrayList<Teacher> list = new ArrayList<Teacher>();
+        try{
+                String qry = "select * from teacher";
+                ResultSet rs = my.executeQuery(qry);
+                while(rs.next()){
+                    Teacher tc = new Teacher();
+                    tc.setTeacherid(rs.getString(1));
+                    list.add(tc);
+                }
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Lỗi đọc Database");
+        }
+        finally{
+            my.close();
+        }
+        return list;
+    }
+    
     public boolean isValidtoAdd(Teacher tc){
        try{
            ArrayList<Teacher> arr = docGV();

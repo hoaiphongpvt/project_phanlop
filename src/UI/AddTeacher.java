@@ -18,6 +18,9 @@ public class AddTeacher extends JFrame implements ActionListener{
             Choice ccourse, cdepartment;
             JButton submit, cancel;
 
+            StringBuilder sb = new StringBuilder();
+            Vector vector= new Vector();
+            
             Random ran = new Random();
             long first4 = Math.abs((ran.nextLong() % 9000L) + 1000L);
             
@@ -40,6 +43,32 @@ public class AddTeacher extends JFrame implements ActionListener{
                     head.add(sv.getDepartid());
                     return head;
             }    
+            
+            private Vector setID(Teacher sv){
+                    Vector head = new Vector();
+                    head.add(sv.getTeacherid());
+                    return head;
+            }   
+            
+            private void showOnTable(ArrayList<Teacher> list){
+            for(Teacher tc:list){
+                         Vector data = setVector(tc);
+                         sb.append(tc+" ");
+                         ccourse.addItem(data);
+           }
+                        tb_kh.setModel(model);
+            }
+            
+            private void load(){
+            TeacherBUS bus1 = new TeacherBUS();       
+            try{
+               bus.docID();
+           }catch(Exception e){
+               JOptionPane.showMessageDialog(null, "Lỗi kết nối đến Database.");
+               return;
+           }
+           ccourse.add(bus1.docID());
+        }
     
         AddTeacher() {
         
