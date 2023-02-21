@@ -51,9 +51,9 @@ public class AddTeacher extends JFrame implements ActionListener{
             }   
             
             private void showOnTable(ArrayList<Teacher> list){
-            for(Teacher tc:list){
-                         Vector data = setVector(tc);
-                         sb.append(tc+" ");
+            for(Teacher kh:list){
+                         Vector data = setVector(kh);
+                         sb.append(kh+" ");
                          ccourse.addItem(data);
            }
                         tb_kh.setModel(model);
