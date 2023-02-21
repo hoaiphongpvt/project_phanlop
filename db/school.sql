@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th2 20, 2023 lúc 04:44 AM
+-- Thời gian đã tạo: Th2 21, 2023 lúc 06:08 PM
 -- Phiên bản máy phục vụ: 10.4.18-MariaDB
 -- Phiên bản PHP: 8.0.3
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Cơ sở dữ liệu: `school1`
+-- Cơ sở dữ liệu: `school`
 --
 
 -- --------------------------------------------------------
@@ -293,9 +293,9 @@ INSERT INTO `studentleave` (`rollno`, `date`, `duration`) VALUES
 --
 
 CREATE TABLE `teacher` (
+  `empId` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
   `fname` varchar(50) NOT NULL,
-  `empId` int(11) NOT NULL,
   `courseID` int(11) NOT NULL,
   `department` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -304,8 +304,8 @@ CREATE TABLE `teacher` (
 -- Đang đổ dữ liệu cho bảng `teacher`
 --
 
-INSERT INTO `teacher` (`name`, `fname`, `empId`, `courseID`, `department`) VALUES
-('Mike', 'Jackie', 2607, 1045, 1);
+INSERT INTO `teacher` (`empId`, `name`, `fname`, `courseID`, `department`) VALUES
+(306, 'mt', 'mt', 1050, 7);
 
 -- --------------------------------------------------------
 
@@ -318,13 +318,6 @@ CREATE TABLE `teacherleave` (
   `date` varchar(50) NOT NULL,
   `duration` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Đang đổ dữ liệu cho bảng `teacherleave`
---
-
-INSERT INTO `teacherleave` (`empId`, `date`, `duration`) VALUES
-('246', '15 thg 2, 2023', 'Half Day');
 
 --
 -- Chỉ mục cho các bảng đã đổ

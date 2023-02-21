@@ -16,7 +16,7 @@ public class AddStudent extends JFrame implements ActionListener{
     StudentBUS bus = new StudentBUS();
     
     JTextField fname, lname;
-    JTextField lblmasv;
+    JTextField txtmmasv;
     JTextField dcdob, dcEnrol;
     JButton submit, cancel;
     
@@ -25,12 +25,12 @@ public class AddStudent extends JFrame implements ActionListener{
     public boolean checkSV = false;
     
     private void initData(){
-        lblmasv.setEditable(false);
+        txtmmasv.setEditable(false);
     }
     
     public Student getText() {
         Student sv = new Student();
-        sv.setMasv(lblmasv.getText().trim());
+        sv.setMasv(txtmmasv.getText().trim());
         sv.setLastname(lname.getText().trim());
         sv.setFirstname(fname.getText().trim());
         sv.setHireDate(dcEnrol.getText().trim());
@@ -83,10 +83,10 @@ public class AddStudent extends JFrame implements ActionListener{
         lblrollno.setFont(new Font("serif", Font.BOLD, 20));
         add(lblrollno);
         
-        lblmasv = new JTextField("312041"+first4);
-        lblmasv.setBounds(200, 200, 110, 30);
-        lblmasv.setFont(new Font("serif", Font.BOLD, 20));
-        add(lblmasv);
+        txtmmasv = new JTextField("312041"+first4);
+        txtmmasv.setBounds(200, 200, 110, 30);
+        txtmmasv.setFont(new Font("serif", Font.BOLD, 20));
+        add(txtmmasv);
         
         JLabel lbldob = new JLabel("HireDate");
         lbldob.setBounds(400, 200, 200, 30);

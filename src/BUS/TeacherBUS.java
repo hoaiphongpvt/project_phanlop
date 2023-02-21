@@ -6,7 +6,7 @@ import BLL.Teacher;
 import java.util.ArrayList;
 
 public class TeacherBUS {
-    public static ArrayList<Teacher> list;    
+    public static ArrayList<Teacher> list = new ArrayList<>();    
     public TeacherBUS(){}
     public ArrayList<Teacher> docTC(){
         TeacherDAL data = new TeacherDAL();

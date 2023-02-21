@@ -6,7 +6,7 @@ import BLL.Student;
 import java.util.ArrayList;
 
 public class StudentBUS {
-    public static ArrayList<Student> list;    
+    public static ArrayList<Student> list = new ArrayList<>();    
     public StudentBUS(){}
     public ArrayList<Student> docKh(){
         StudentDAL data = new StudentDAL();

@@ -3,11 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Workspace/University%20Management%20System/src/UI/Project.java</file>
-            <file>file:/D:/Workspace/University%20Management%20System/src/UI/AddStudent.java</file>
-            <file>file:/D:/Workspace/University%20Management%20System/src/BUS/StudentBUS.java</file>
-            <file>file:/D:/Workspace/University%20Management%20System/src/BLL/Student.java</file>
-            <file>file:/D:/Workspace/University%20Management%20System/src/DAL/StudentDAL.java</file>
+            <file>file:/D:/Workspace/PMPL/XDPM/src/BLL/Teacher.java</file>
+            <file>file:/D:/Workspace/PMPL/XDPM/src/UI/AddTeacher.java</file>
+            <file>file:/D:/Workspace/PMPL/XDPM/src/BUS/TeacherBUS.java</file>
+            <file>file:/D:/Workspace/PMPL/XDPM/src/DAL/TeacherDAL.java</file>
         </group>
     </open-files>
 </project-private>

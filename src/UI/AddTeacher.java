@@ -14,7 +14,7 @@ public class AddTeacher extends JFrame implements ActionListener{
 
     
             JTextField tfname, fname;
-            JLabel labelempId;
+            JTextField txtmagv;
             Choice ccourse, cdepartment;
             JButton submit, cancel;
 
@@ -26,9 +26,9 @@ public class AddTeacher extends JFrame implements ActionListener{
             
             public Teacher getText() {
                 Teacher tc = new Teacher();
-                tc.setTeacherid(labelempId.getText().trim());
                 tc.setName(tfname.getText().trim());
                 tc.setFname(fname.getText().trim());
+                tc.setTeacherid(txtmagv.getText().trim());
                 tc.setCourseid(ccourse.getSelectedItem());
                 tc.setDepartid(cdepartment.getSelectedItem());
                 return tc;
@@ -44,31 +44,35 @@ public class AddTeacher extends JFrame implements ActionListener{
                     return head;
             }    
             
-            private Vector setID(Teacher sv){
-                    Vector head = new Vector();
-                    head.add(sv.getTeacherid());
-                    return head;
-            }   
-            
-            private void showOnTable(ArrayList<Teacher> list){
-            for(Teacher kh:list){
-                         Vector data = setVector(kh);
-                         sb.append(kh+" ");
-                         ccourse.addItem(data);
-           }
-                        tb_kh.setModel(model);
+            public void initdata() {
+                    txtmagv.setEditable(false);
             }
             
-            private void load(){
-            TeacherBUS bus1 = new TeacherBUS();       
-            try{
-               bus.docID();
-           }catch(Exception e){
-               JOptionPane.showMessageDialog(null, "Lỗi kết nối đến Database.");
-               return;
-           }
-           ccourse.add(bus1.docID());
-        }
+//            private Vector setID(Teacher sv){
+//                    Vector head = new Vector();
+//                    head.add(sv.getTeacherid());
+//                    return head;
+//            }   
+//            
+//            private void showOnTable(ArrayList<Teacher> list){
+//            for(Teacher kh:list){
+//                         Vector data = setVector(kh);
+//                         sb.append(kh+" ");
+//                         ccourse.addItem(data);
+//           }
+//                        tb_kh.setModel(model);
+//            }
+//            
+//            private void load(){
+//            TeacherBUS bus1 = new TeacherBUS();       
+//            try{
+//               bus.docID();
+//           }catch(Exception e){
+//               JOptionPane.showMessageDialog(null, "Lỗi kết nối đến Database.");
+//               return;
+//           }
+//           ccourse.add(bus1.docID());
+//        }
     
         AddTeacher() {
         
@@ -105,10 +109,10 @@ public class AddTeacher extends JFrame implements ActionListener{
             lblempId.setFont(new Font("serif", Font.BOLD, 20));
             add(lblempId);
 
-            labelempId = new JLabel("0"+first4);
-            labelempId.setBounds(200, 200, 200, 30);
-            labelempId.setFont(new Font("serif", Font.BOLD, 20));
-            add(labelempId);
+            txtmagv = new JTextField("0"+first4);
+            txtmagv.setBounds(200, 200, 110, 30);
+            txtmagv.setFont(new Font("serif", Font.BOLD, 20));
+            add(txtmagv);
 
             JLabel lbldob = new JLabel("Department");
             lbldob.setBounds(400, 200, 200, 30);
@@ -162,24 +166,26 @@ public class AddTeacher extends JFrame implements ActionListener{
             cancel.setFont(new Font("serif", Font.BOLD, 20));
             add(cancel);
             
+            initdata();
+            
         setVisible(true);
     }
     
             
     
     public void actionPerformed(ActionEvent ae) {
-        if (ae.getSource() == submit) {
-            Teacher tc = getText();
-            Vector head = setVector(tc);
-            int check = bus.themTC(tc);
-            if(check == 1){ 
-                JOptionPane.showMessageDialog(null, "Thêm thành công");
-                setVisible(false);
-                }else{JOptionPane.showMessageDialog(null, "Thêm thất bại");
-                setVisible(false);
-            }}else { 
-            setVisible(false);
-        }
+            if (ae.getSource() == submit) {
+                        Teacher tc = getText();
+                        Vector head = setVector(tc);
+                        int check = bus.themTC(tc);
+                        if(check == 1){ 
+                                    JOptionPane.showMessageDialog(null, "Thêm thành công");
+                                    setVisible(false);
+                                    }else{JOptionPane.showMessageDialog(null, "Thêm thất bại");
+                                    setVisible(false);}
+            }else { 
+                        setVisible(false);
+            }
     }
     
     public static void main(String[] args) {
