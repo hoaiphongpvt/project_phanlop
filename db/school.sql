@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th2 21, 2023 lúc 06:08 PM
+-- Thời gian đã tạo: Th2 24, 2023 lúc 03:11 PM
 -- Phiên bản máy phục vụ: 10.4.18-MariaDB
 -- Phiên bản PHP: 8.0.3
 
@@ -72,7 +72,7 @@ INSERT INTO `course` (`CourseID`, `Title`, `Credits`, `DepartmentID`) VALUES
 
 CREATE TABLE `courseinstructor` (
   `CourseID` int(11) NOT NULL,
-  `PersonID` bigint(20) NOT NULL
+  `PersonID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -80,9 +80,7 @@ CREATE TABLE `courseinstructor` (
 --
 
 INSERT INTO `courseinstructor` (`CourseID`, `PersonID`) VALUES
-(1045, 3120410003),
-(1050, 3120410001),
-(2021, 3120410001);
+(1050, 967);
 
 -- --------------------------------------------------------
 
@@ -265,6 +263,14 @@ CREATE TABLE `studentgrade` (
   `Grade` decimal(3,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Đang đổ dữ liệu cho bảng `studentgrade`
+--
+
+INSERT INTO `studentgrade` (`EnrollmentID`, `CourseID`, `StudentID`, `Grade`) VALUES
+(1123, 1045, 3120410005, '4.00'),
+(1524, 1045, 3120410002, '4.00');
+
 -- --------------------------------------------------------
 
 --
@@ -305,7 +311,8 @@ CREATE TABLE `teacher` (
 --
 
 INSERT INTO `teacher` (`empId`, `name`, `fname`, `courseID`, `department`) VALUES
-(306, 'mt', 'mt', 1050, 7);
+(306, 'mt', 'mt', 1050, 7),
+(967, '', '', 1045, 1);
 
 -- --------------------------------------------------------
 
@@ -401,12 +408,6 @@ ALTER TABLE `teacher`
 --
 
 --
--- AUTO_INCREMENT cho bảng `course`
---
-ALTER TABLE `course`
-  MODIFY `CourseID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4062;
-
---
 -- AUTO_INCREMENT cho bảng `studentgrade`
 --
 ALTER TABLE `studentgrade`
@@ -433,7 +434,7 @@ ALTER TABLE `course`
 --
 ALTER TABLE `courseinstructor`
   ADD CONSTRAINT `fk_course` FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`),
-  ADD CONSTRAINT `fk_person` FOREIGN KEY (`PersonID`) REFERENCES `person` (`PersonID`);
+  ADD CONSTRAINT `fk_person` FOREIGN KEY (`PersonID`) REFERENCES `teacher` (`empId`);
 
 --
 -- Các ràng buộc cho bảng `onlinecourse`
