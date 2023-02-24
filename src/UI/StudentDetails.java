@@ -1,16 +1,66 @@
 package UI;
 
+import BLL.Student;
+import BUS.StudentBUS;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 import net.proteanit.sql.DbUtils;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
 
 public class StudentDetails extends JFrame implements ActionListener {
+
+    DefaultTableModel model = new DefaultTableModel();
+    StudentBUS bus = new StudentBUS();
 
     Choice crollno;
     JTable table;
     JButton search, print, update, add, cancel;
+    
+    private void load(){
+        StudentBUS bus = new StudentBUS();       
+        try{
+           bus.docSV();
+       }catch(Exception e){
+           JOptionPane.showMessageDialog(null, "Lỗi kết nối đến Database.");
+           return;
+       }
+       Vector header = new Vector();
+        header.add("PersonID");
+        header.add("Lastname");
+        header.add("Firstname");
+        header.add("HireDate");
+        header.add("EnrollmentDate");
+            model = new DefaultTableModel(header,0){
+            public boolean isCellEditable(int row, int column)
+                {
+                  return false;
+                }
+       };	
+       showOnTable(bus.list);
+    }
+    
+    private void showOnTable(ArrayList<Student> list){
+        model.setRowCount(0);
+        for(Student sv:list){
+           Vector data = setVector(sv);
+           model.addRow(data);
+       }
+       table.setModel(model);
+    }
+    
+    private Vector setVector(Student sv){
+            Vector head = new Vector();
+            head.add(sv.getMasv());
+            head.add(sv.getLastname());
+            head.add(sv.getFirstname());
+            head.add(sv.getHireDate());
+            head.add(sv.getEnrollmentDate());
+            return head;
+    }    
     
     StudentDetails() {
         
@@ -36,14 +86,6 @@ public class StudentDetails extends JFrame implements ActionListener {
         }
         
         table = new JTable();
-        
-        try {
-            Conn c = new Conn();
-            ResultSet rs = c.s.executeQuery("select * from person");
-            table.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         
         JScrollPane jsp = new JScrollPane(table);
         jsp.setBounds(0, 100, 900, 600);
@@ -76,6 +118,8 @@ public class StudentDetails extends JFrame implements ActionListener {
         
         setSize(900, 700);
         setLocation(300, 100);
+        
+        load();
         setVisible(true);
     }
     

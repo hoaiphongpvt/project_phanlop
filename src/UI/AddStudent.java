@@ -2,15 +2,10 @@ package UI;
 
 import BLL.Student;
 import BUS.StudentBUS;
-import DAL.StudentDAL;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
-import com.toedter.calendar.JDateChooser;
 import java.awt.event.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import javax.swing.table.DefaultTableModel;
 
 public class AddStudent extends JFrame implements ActionListener{
     StudentBUS bus = new StudentBUS();
@@ -108,7 +103,7 @@ public class AddStudent extends JFrame implements ActionListener{
         dcEnrol.setFont(new Font("serif", Font.BOLD, 20));
         add(dcEnrol);
         
-        submit = new JButton("Submit");
+        submit = new JButton("Add");
         submit.setBounds(250, 350, 120, 30);
         submit.setBackground(Color.BLACK);
         submit.setForeground(Color.WHITE);

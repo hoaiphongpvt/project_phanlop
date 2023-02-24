@@ -68,6 +68,11 @@ public class Project extends JFrame implements ActionListener {
         onsitecourse.addActionListener(this);
         details.add(onsitecourse);
         
+        JMenuItem managementCourse = new JMenuItem("View Management Course Details");
+        managementCourse.setBackground(Color.WHITE);
+        managementCourse.addActionListener(this);
+        details.add(managementCourse);
+        
         // Leave
         JMenu leave = new JMenu("Apply Leave");
         leave.setForeground(Color.BLUE);
@@ -216,6 +221,8 @@ public class Project extends JFrame implements ActionListener {
             new officeassignment();
         }else if (msg.equals("View Onsite Course Details")) {
             new onsitecourse();
+        }else if (msg.equals("View Management Course Details")) {
+            new Management_Course();
         }else if (msg.equals("Faculty Leave")) {
             new TeacherLeave();
         } else if (msg.equals("Student Leave")) {

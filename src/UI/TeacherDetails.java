@@ -1,16 +1,66 @@
 package UI;
 
+import BLL.Teacher;
+import BUS.TeacherBUS;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.*;
 import net.proteanit.sql.DbUtils;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Vector;
+import javax.swing.table.DefaultTableModel;
 
 public class TeacherDetails extends JFrame implements ActionListener {
+    
+    TeacherBUS bus = new TeacherBUS();
+    DefaultTableModel model = new DefaultTableModel();
 
     Choice cEmpId;
     JTable table;
     JButton search, print, update, add, cancel;
+    
+    private void load(){
+        TeacherBUS bus = new TeacherBUS();       
+        try{
+           bus.docTC();
+       }catch(Exception e){
+           JOptionPane.showMessageDialog(null, "Lỗi kết nối đến Database.");
+           return;
+       }
+       Vector header = new Vector();
+        header.add("TeacherID");
+        header.add("Name");
+        header.add("Fname");
+        header.add("Course ID");
+        header.add("Department ID");
+            model = new DefaultTableModel(header,0){
+            public boolean isCellEditable(int row, int column)
+                {
+                  return false;
+                }
+       };	
+       showOnTable(bus.list);
+    }
+    
+    private void showOnTable(ArrayList<Teacher> list){
+        model.setRowCount(0);
+        for(Teacher tc:list){
+           Vector data = setVector(tc);
+           model.addRow(data);
+       }
+       table.setModel(model);
+    }
+    
+    private Vector setVector(Teacher tc){
+            Vector head = new Vector();
+            head.add(tc.getTeacherid());
+            head.add(tc.getName());
+            head.add(tc.getFname());
+            head.add(tc.getCourseid());
+            head.add(tc.getDepartid());
+            return head;
+    }    
     
     TeacherDetails() {
         
@@ -36,14 +86,7 @@ public class TeacherDetails extends JFrame implements ActionListener {
         }
         
         table = new JTable();
-        
-        try {
-            Conn c = new Conn();
-            ResultSet rs = c.s.executeQuery("select * from teacher");
-            table.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        load();
         
         JScrollPane jsp = new JScrollPane(table);
         jsp.setBounds(0, 100, 900, 600);

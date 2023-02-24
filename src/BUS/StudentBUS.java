@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class StudentBUS {
     public static ArrayList<Student> list = new ArrayList<>();    
     public StudentBUS(){}
-    public ArrayList<Student> docKh(){
+    public ArrayList<Student> docSV(){
         StudentDAL data = new StudentDAL();
         try{
             list = new ArrayList<Student>();

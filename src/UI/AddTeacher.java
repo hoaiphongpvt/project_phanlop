@@ -17,9 +17,6 @@ public class AddTeacher extends JFrame implements ActionListener{
             JTextField txtmagv;
             Choice ccourse, cdepartment;
             JButton submit, cancel;
-
-            StringBuilder sb = new StringBuilder();
-            Vector vector= new Vector();
             
             Random ran = new Random();
             long first4 = Math.abs((ran.nextLong() % 9000L) + 1000L);
