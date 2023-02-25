@@ -37,6 +37,8 @@ public class Management_Course extends JFrame implements ActionListener{
             Random ran = new Random();
             long first4 = Math.abs((ran.nextLong() % 9000L) + 1000L);
             int rd = (int) Math.abs((ran.nextInt() % 9L) + 1L);
+            Random r  = new Random(first4);
+            
             
             public void init() {
                 txt_courseid.setEditable(false);
@@ -187,7 +189,7 @@ public class Management_Course extends JFrame implements ActionListener{
                         lblDepartment.setFont(new Font("serif", Font.BOLD, 30));
                         add(lblDepartment);
                         
-                        txt_departmentid = new JTextField("0"+rd);
+                        txt_departmentid = new JTextField();
                         txt_departmentid.setBounds(760, 170, 50, 50);
                         txt_departmentid.setFont(new Font("serif", Font.PLAIN, 30));
                         add(txt_departmentid);
@@ -203,6 +205,7 @@ public class Management_Course extends JFrame implements ActionListener{
                         
                         search = new Button("Search");
                         search.setBounds(550, 230, 150, 50);
+                        search.addActionListener(this);
                         search.setFont(new Font("serif", Font.BOLD, 30));
                         add(search);
                         
@@ -213,16 +216,19 @@ public class Management_Course extends JFrame implements ActionListener{
                         
                         add = new Button("Add");
                         add.setBounds(900, 100, 70, 50);
+                        add.addActionListener(this);
                         add.setFont(new Font("serif", Font.BOLD, 30));
                         add(add);
                         
                         edit = new Button("Edit");
                         edit.setBounds(900, 170, 70, 50);
+                        edit.addActionListener(this);
                         edit.setFont(new Font("serif", Font.BOLD, 30));
                         add(edit);
                         
                         cancel = new Button("Cancel");
                         cancel.setBounds(900, 240, 100, 50);
+                        cancel.addActionListener(this);
                         cancel.setFont(new Font("serif", Font.BOLD, 30));
                         add(cancel);
                         
@@ -265,31 +271,39 @@ public class Management_Course extends JFrame implements ActionListener{
                         setVisible(true);
             }
             
-                        public void searchtk(){
-                            model.setRowCount(0);
-                            for(Course cs:bus.timkiemtongquan(txt_tk.getText())){
-                                model.addRow(new Object[]{
-                                    cs.getCourseID(),cs.getCredits(),cs.getTitle(),cs.getDepartmentID()
-                                });
-                            }
-                        }      
+            public void searchtk(){
+                model.setRowCount(0);
+                for(Course cs:bus.timkiemtongquan(txt_tk.getText())){
+                    model.addRow(new Object[]{
+                        cs.getCourseID(),cs.getCredits(),cs.getTitle(),cs.getDepartmentID()
+                    });
+                }
+            }      
+            
+            private void reload() {
+                txt_Title.setText("");
+                txt_credits.setText("");
+                txt_departmentid.setText("");
+                txt_tk.setText("");
+                txt_courseid.setText("0"+first4);
+            }
                         
             public void actionPerformed(ActionEvent ae) {
                 if (ae.getSource() == search) {
-                   String[] header = {"CourseID", "DepartmentID","Credits","Title"};
+                   String[] header = {"CourseID", "Title","Credits","DepartmentID"};
                    DefaultTableModel modelsearch = new DefaultTableModel(header, 0);
                    ArrayList<Course> s;
                    s = bus.timkiem(String.valueOf(cbsearch.getSelectedItem()), txt_tk.getText().toLowerCase().trim());
                    if (s.size() != 0) {
+                       reload();
                        for (int i = 0; i < s.size(); i++) {
-                           Object[] row = {s.get(i).getCourseID(), s.get(i).getDepartmentID(), s.get(i).getCredits(), s.get(i).getTitle()
+                           Object[] row = {s.get(i).getCourseID(), s.get(i).getTitle(), s.get(i).getCredits(), s.get(i).getDepartmentID()
                            };
                            modelsearch.addRow(row);
                        }
                        tempsearch.addAll(arr);
                        arr.clear();
                        arr.addAll(s);
-
                        tb_course.setModel(modelsearch);
                    } else {
                        JOptionPane.showMessageDialog(null, "Không có kết quả phù hợp!");
@@ -300,20 +314,25 @@ public class Management_Course extends JFrame implements ActionListener{
                                int check = bus.themCourse(cs);
                                if(check == 1){ 
                                    JOptionPane.showMessageDialog(null, "Thêm thành công");
+                                   reload();
                                    setVisible(false);
-                                   }else{JOptionPane.showMessageDialog(null, "Mã đã tồn tại. Thêm thất bại");
+                                   }else{JOptionPane.showMessageDialog(null, "Thêm thất bại");
+                                   reload();
                                    setVisible(false);
                                }
-                   }else if(ae.getSource() == edit) {//lỗi sửa
+                   }else if(ae.getSource() == edit) {
                                int i = tb_course.getSelectedRow();
                                Course s = getText();
                                int check = bus.suaCourse(s, i);
                                if (check == 1) {
                                    setModelValue(s, i);
                                    JOptionPane.showMessageDialog(null, "Sửa thành công");
+                                   reload();
                                }
                                else {
                                JOptionPane.showMessageDialog(null, "Sửa thất bại");
+                               reload();
+                               setVisible(false);
                            }
                    } else {
                                setVisible(false);

@@ -150,7 +150,7 @@ public class Onlinecourse extends JFrame implements ActionListener{
         load();
         
         JScrollPane jsp = new JScrollPane(table);
-        jsp.setBounds(0, 300, 800, 500);
+        jsp.setBounds(400, 300, 800, 500);
         add(jsp);
         
         setVisible(true);

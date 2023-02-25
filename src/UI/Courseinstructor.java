@@ -7,6 +7,7 @@ import BLL.Teacher;
 import BUS.CourseBUS;
 import BUS.CourseInstructorBUS;
 import BUS.TeacherBUS;
+import java.awt.Button;
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Font;
@@ -15,6 +16,7 @@ import java.awt.event.ActionListener;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -42,12 +44,13 @@ public class Courseinstructor extends JFrame implements ActionListener{
             CourseInstructorBUS buscourseinstructor = new CourseInstructorBUS();
             
             Vector header = new Vector();
-
+            JButton reload;
             JTextField txtCourseID,txtPersonID;
             JButton btnaddButton,btncancel,btnsubmit,btnsearch;
             JTable tb_teacher,tbcourse,tbsearch;
             JComboBox cbsearch;
             JTextField txt_search;
+            ImageIcon img = new ImageIcon("icons/icons8-sync-50.png");
             
             public CourseInstructor getText() {
                 CourseInstructor cs = new CourseInstructor();
@@ -235,6 +238,12 @@ public class Courseinstructor extends JFrame implements ActionListener{
         txt_search.setFont(new Font("serif", Font.BOLD, 20));
         add(txt_search);
         
+        reload = new JButton("Reload");
+        reload.setBounds(500, 150, 100, 50);
+        reload.addActionListener(this);
+        reload.setFont(new Font("serif", Font.BOLD, 20));
+        add(reload);
+        
         btnaddButton = new JButton("Add");
         btnaddButton.setBounds(50, 230, 100, 50);
         btnaddButton.addActionListener(this);
@@ -337,8 +346,10 @@ public class Courseinstructor extends JFrame implements ActionListener{
                             }else{JOptionPane.showMessageDialog(null, "Mã đã tồn tại. Thêm thất bại");
                             setVisible(false);
                         }
-            }else if(ae.getSource() == btnsubmit) {//lỗi sửa
-                        int i = tb_teacher.getSelectedRow();
+            }
+            //ý tưởng sửa lấy dữ liệu từ bảng lên form và sửa 
+            else if(ae.getSource() == btnsubmit) {//lỗi sửa
+                        int i = tbsearch.getSelectedRow();
                         CourseInstructor s = getText();
                         int check = buscourseinstructor.suaCourseInstructor(s, i);
                         if (check == 1) {
@@ -348,7 +359,13 @@ public class Courseinstructor extends JFrame implements ActionListener{
                         else {
                         JOptionPane.showMessageDialog(null, "Sửa thất bại");
                     }
-            } else {
+            } 
+            else if(ae.getSource() == reload) {
+                        txtCourseID.setEditable(true);
+                        txtPersonID.setText("");
+                        txtCourseID.setText("");
+                        txt_search.setText("");
+            }else {
                         setVisible(false);
             }
     }
@@ -373,6 +390,7 @@ public class Courseinstructor extends JFrame implements ActionListener{
             
             private void tb_Search(java.awt.event.MouseEvent evt) {                                        
                         int i = tbsearch.getSelectedRow();
+                        txtCourseID.setEditable(false);
                         if (i >= 0) {
                                     txtCourseID.setText(tbsearch.getModel().getValueAt(i, 0).toString());
                                     txtPersonID.setText(tbsearch.getModel().getValueAt(i, 1).toString());

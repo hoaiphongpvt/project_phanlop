@@ -70,9 +70,9 @@ public class CourseBUS {
                     }
                     return temp;
                 }
-                if (key.equals("Title")) {
+                if (key.equals("DepartmentID")) {
                     for (int i = 0; i < s.size(); i++) {
-                        if (s.get(i).getTitle().toLowerCase().equals(query)) {
+                        if (s.get(i).getDepartmentID().toLowerCase().equals(query)) {
                             temp.add(s.get(i));
                         }
 
@@ -88,9 +88,9 @@ public class CourseBUS {
                     }
                     return temp;
                 }
-                if (key.equals("DepartmentID")) {
+                if (key.equals("Title")) {
                     for (int i = 0; i < s.size(); i++) {
-                        if (s.get(i).getDepartmentID().toLowerCase().equals(query)) {
+                        if (s.get(i).getTitle().toLowerCase().equals(query)) {
                             temp.add(s.get(i));
                         }
 
