@@ -18,21 +18,21 @@ public class StudentGradeBUS {
         }
         return list;
     }
-    public int themGrade(StudentGrade sv){
+    public int them(StudentGrade sv){
         StudentGradeDAL data = new StudentGradeDAL();
         int check = data.themGrade(sv);
         if(check==1)
             list.add(sv);
         return check;
     }
-    public int suaGrade(StudentGrade sv,int i){
+    public int sua(StudentGrade sv,int i){
         StudentGradeDAL data = new StudentGradeDAL();
         int check = data.suaGrade(sv);
         if(check ==1)
             list.set(i,sv);
         return check;
     }
-            public static ArrayList<StudentGrade> timkiemSanPham(String key, String query) {
+            public static ArrayList<StudentGrade> timkiem(String key, String query) {
                 ArrayList<StudentGrade> temp = new ArrayList<>();
                 StudentGradeDAL data = new StudentGradeDAL();
                 try{

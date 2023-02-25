@@ -132,7 +132,7 @@ public class Marks extends JFrame implements ActionListener {
                         String[] header = {"EnrollmentID", "CourseID", "StudentID", "Grade"};
                         DefaultTableModel modelsearch = new DefaultTableModel(header, 0);
                         ArrayList<StudentGrade> s;
-                        s = busGrade.timkiemSanPham(String.valueOf(cbBox.getSelectedItem()), txtsearch.getText().toLowerCase().trim());
+                        s = busGrade.timkiem(String.valueOf(cbBox.getSelectedItem()), txtsearch.getText().toLowerCase().trim());
                         if (s.size() != 0) {
                             for (int i = 0; i < s.size(); i++) {
                                 Object[] row = {s.get(i).getEnrollID(), s.get(i).getCourseID(), s.get(i).getStudentID(), s.get(i).getGrade()

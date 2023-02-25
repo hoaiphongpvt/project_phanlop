@@ -348,12 +348,14 @@ public class Courseinstructor extends JFrame implements ActionListener{
                         }
             }
             //ý tưởng sửa lấy dữ liệu từ bảng lên form và sửa 
-            else if(ae.getSource() == btnsubmit) {//lỗi sửa
+            else if(ae.getSource() == btnsubmit) {//Chỉ sửa được mã nhân viên trong bảng giáo viên
                         int i = tbsearch.getSelectedRow();
-                        CourseInstructor s = getText();
-                        int check = buscourseinstructor.suaCourseInstructor(s, i);
+                        CourseInstructor cs = new CourseInstructor();
+                        cs.setCourseID(txtCourseID.getText().trim());
+                        cs.setTeacherID(txtPersonID.getText().trim());
+                        int check = buscourseinstructor.suaCourseInstructor(cs, i);
                         if (check == 1) {
-                            setModelValue(s, i);
+                            setModelValue(cs, i);
                             JOptionPane.showMessageDialog(null, "Sửa thành công");
                         }
                         else {

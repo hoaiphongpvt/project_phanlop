@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th2 25, 2023 lúc 12:19 PM
+-- Thời gian đã tạo: Th2 25, 2023 lúc 03:17 PM
 -- Phiên bản máy phục vụ: 10.4.18-MariaDB
 -- Phiên bản PHP: 8.0.3
 
@@ -54,15 +54,16 @@ CREATE TABLE `course` (
 
 INSERT INTO `course` (`CourseID`, `Title`, `Credits`, `DepartmentID`) VALUES
 (1045, 'Calculus', 4, 7),
-(1050, 'Chemistry', 4, 1),
-(1061, 'Physics', 4, 1),
-(2021, 'Composition', 3, 2),
-(2030, 'Poetry', 2, 2),
+(1050, 'Quantum physics', 4, 1),
+(1061, 'Educated', 4, 2),
+(2021, 'Analytics', 3, 7),
+(2030, 'Physics', 1, 7),
 (2042, 'Literature', 4, 2),
 (3141, 'Trigonometry', 4, 7),
 (4022, 'Microeconomics', 3, 4),
 (4041, 'Macroeconomics', 3, 4),
-(4061, 'Quantitative', 2, 4);
+(4061, 'Quantitative', 2, 4),
+(7805, 'Electronic Physics', 9, 7);
 
 -- --------------------------------------------------------
 
@@ -80,9 +81,8 @@ CREATE TABLE `courseinstructor` (
 --
 
 INSERT INTO `courseinstructor` (`CourseID`, `PersonID`) VALUES
-(1050, 967),
-(1061, 967),
-(2042, 967);
+(1050, 306),
+(1045, 967);
 
 -- --------------------------------------------------------
 
@@ -273,8 +273,10 @@ CREATE TABLE `studentgrade` (
 --
 
 INSERT INTO `studentgrade` (`EnrollmentID`, `CourseID`, `StudentID`, `Grade`) VALUES
-(1123, 1045, 3120410005, '4.00'),
-(1524, 1045, 3120410002, '4.00');
+(1011, 1061, 3120410002, '1.00'),
+(1123, 1061, 3120410004, '2.00'),
+(1524, 2030, 3120410003, '2.00'),
+(6722, 1061, 3120410002, '5.00');
 
 -- --------------------------------------------------------
 
@@ -353,8 +355,8 @@ ALTER TABLE `course`
 -- Chỉ mục cho bảng `courseinstructor`
 --
 ALTER TABLE `courseinstructor`
-  ADD PRIMARY KEY (`CourseID`,`PersonID`),
-  ADD KEY `fk_person` (`PersonID`);
+  ADD PRIMARY KEY (`CourseID`),
+  ADD KEY `fk_emp` (`PersonID`);
 
 --
 -- Chỉ mục cho bảng `department`
@@ -438,8 +440,7 @@ ALTER TABLE `course`
 -- Các ràng buộc cho bảng `courseinstructor`
 --
 ALTER TABLE `courseinstructor`
-  ADD CONSTRAINT `fk_course` FOREIGN KEY (`CourseID`) REFERENCES `course` (`CourseID`),
-  ADD CONSTRAINT `fk_person` FOREIGN KEY (`PersonID`) REFERENCES `teacher` (`empId`);
+  ADD CONSTRAINT `fk_emp` FOREIGN KEY (`PersonID`) REFERENCES `teacher` (`empId`);
 
 --
 -- Các ràng buộc cho bảng `onlinecourse`

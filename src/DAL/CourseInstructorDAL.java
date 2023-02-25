@@ -35,8 +35,8 @@ public class CourseInstructorDAL {
            ArrayList<CourseInstructor> arr = doc();
            for (int i = 0; i < arr.size(); i++) {
                if(arr.get(i).getCourseID().equals(courseInstructor.getCourseID())){
-                JOptionPane.showMessageDialog(null,"Mã môn đã tồn tại");
-                return false;}
+                JOptionPane.showMessageDialog(null,"Môn học này đã được phân công rồi");
+                return true;}
                else return true;}
         }catch(Exception e){
             return true;
@@ -63,7 +63,7 @@ public class CourseInstructorDAL {
         int res = 0;
         try{
             String qry = "update courseinstructor set ";
-            qry = qry + "PersonID='"+courseInstructor.getTeacherID()+"',";
+            qry = qry + "PersonID='"+courseInstructor.getTeacherID()+"'";
             qry = qry +" where CourseID ='"+courseInstructor.getCourseID()+"'";
             res = my.executeUpdate(qry);
         }catch(Exception e){

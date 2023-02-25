@@ -26,19 +26,19 @@ public class Management_Course extends JFrame implements ActionListener{
             ArrayList<Course> arr = new ArrayList<Course>();
             ArrayList<Course> tempsearch = new ArrayList<Course>();
             CourseBUS bus = new CourseBUS();
-    
+            DefaultTableModel model = new DefaultTableModel();
+            DefaultTableModel model1 = new DefaultTableModel();
+
+
             JLabel lblcourseID,lblTitlle,lblCredits,lblDepartment;
             JTextField txt_courseid,txt_Title,txt_credits,txt_departmentid,txt_tk;
-            Button add,edit,cancel,search;
-            DefaultTableModel model = new DefaultTableModel();
+            Button add,edit,cancel,search,reload;
             JTable tb_course,tb_depart;
             JComboBox cbsearch;
 
             Random ran = new Random();
             long first4 = Math.abs((ran.nextLong() % 9000L) + 1000L);
-            int rd = (int) Math.abs((ran.nextInt() % 9L) + 1L);
-            Random r  = new Random(first4);
-            
+            int rd = (int) Math.abs((ran.nextInt() % 9L) + 1L);            
             
             public void init() {
                 txt_courseid.setEditable(false);
@@ -96,7 +96,7 @@ public class Management_Course extends JFrame implements ActionListener{
                 Vector header = new Vector();
                 header.add("Department ID");
                 header.add("Name");
-                model = new DefaultTableModel(header, 0) {
+                model1 = new DefaultTableModel(header, 0) {
                     public boolean isCellEditable(int row, int column) {
                         return false;
                     }
@@ -105,12 +105,12 @@ public class Management_Course extends JFrame implements ActionListener{
             }
             
             public void showOnTableDepartment(ArrayList<Department> list) {
-                model.setRowCount(0);
+                model1.setRowCount(0);
                 for (Department depart : list) {
                     Vector data = setVectorDepartment(depart);
-                    model.addRow(data);
+                    model1.addRow(data);
                 }
-                tb_depart.setModel(model);
+                tb_depart.setModel(model1);
             }
             
             public Vector setVectorDepartment(Department depart) {
@@ -130,8 +130,17 @@ public class Management_Course extends JFrame implements ActionListener{
             }
             
             public void setModelValueDepart(Department cs, int i) {
-                model.setValueAt(cs.getDepartID(), i, 0);
-                tb_depart.setModel(model);
+                model1.setValueAt(cs.getDepartID(), i, 0);
+                tb_depart.setModel(model1);
+            }
+            
+            public void reload() {
+                txt_courseid.setText(""+first4);
+                txt_Title.setText("");
+                txt_credits.setText(""+rd);
+                txt_departmentid.setText("");
+                txt_tk.setText("");
+                load();
             }
     
             Management_Course() {
@@ -150,7 +159,7 @@ public class Management_Course extends JFrame implements ActionListener{
                         lblcourseID.setFont(new Font("serif", Font.BOLD, 30));
                         add(lblcourseID);
                         
-                        txt_courseid = new JTextField("0"+first4);
+                        txt_courseid = new JTextField(""+first4);
                         txt_courseid.setBounds(200, 100, 100, 50);
                         txt_courseid.setFont(new Font("serif", Font.ITALIC, 30));
                         add(txt_courseid);
@@ -186,7 +195,7 @@ public class Management_Course extends JFrame implements ActionListener{
                         add(txt_departmentid);
                         
                         cbsearch = new JComboBox();
-                        cbsearch.setBounds(50, 230, 200, 50);
+                        cbsearch.setBounds(50, 230, 250, 50);
                         cbsearch.setFont(new Font("serif", Font.BOLD, 30));
                         cbsearch.addItem("CourseID");
                         cbsearch.addItem("DepartmentID");
@@ -195,13 +204,13 @@ public class Management_Course extends JFrame implements ActionListener{
                         add(cbsearch);
                         
                         search = new Button("Search");
-                        search.setBounds(550, 230, 150, 50);
+                        search.setBounds(600, 230, 150, 50);
                         search.addActionListener(this);
                         search.setFont(new Font("serif", Font.BOLD, 30));
                         add(search);
                         
                         txt_tk = new JTextField();
-                        txt_tk.setBounds(250, 230,250, 50);
+                        txt_tk.setBounds(300, 230,250, 50);
                         txt_tk.setFont(new Font("serif", Font.BOLD, 30));
                         add(txt_tk);
                         
@@ -216,6 +225,12 @@ public class Management_Course extends JFrame implements ActionListener{
                         edit.addActionListener(this);
                         edit.setFont(new Font("serif", Font.BOLD, 30));
                         add(edit);
+                        
+                        reload = new Button("Reload");
+                        reload.setBounds(1000, 170, 150, 50);
+                        reload.addActionListener(this);
+                        reload.setFont(new Font("serif", Font.BOLD, 30));
+                        add(reload);
                         
                         cancel = new Button("Cancel");
                         cancel.setBounds(900, 240, 100, 50);
@@ -261,23 +276,6 @@ public class Management_Course extends JFrame implements ActionListener{
                         init();
                         setVisible(true);
             }
-            
-            public void searchtk(){
-                model.setRowCount(0);
-                for(Course cs:bus.timkiemtongquan(txt_tk.getText())){
-                    model.addRow(new Object[]{
-                        cs.getCourseID(),cs.getCredits(),cs.getTitle(),cs.getDepartmentID()
-                    });
-                }
-            }      
-            
-            private void reload() {
-                txt_Title.setText("");
-                txt_credits.setText("");
-                txt_departmentid.setText("");
-                txt_tk.setText("");
-                txt_courseid.setText("0"+first4);
-            }
                         
             public void actionPerformed(ActionEvent ae) {
                 if (ae.getSource() == search) {
@@ -286,7 +284,6 @@ public class Management_Course extends JFrame implements ActionListener{
                    ArrayList<Course> s;
                    s = bus.timkiem(String.valueOf(cbsearch.getSelectedItem()), txt_tk.getText().toLowerCase().trim());
                    if (s.size() != 0) {
-                       reload();
                        for (int i = 0; i < s.size(); i++) {
                            Object[] row = {s.get(i).getCourseID(), s.get(i).getTitle(), s.get(i).getCredits(), s.get(i).getDepartmentID()
                            };
@@ -308,12 +305,12 @@ public class Management_Course extends JFrame implements ActionListener{
                                int check = bus.themCourse(cs);
                                if(check == 1){ 
                                    JOptionPane.showMessageDialog(null, "Thêm thành công");
-                                   reload();
                                    setVisible(false);
                                    }else{JOptionPane.showMessageDialog(null, "Thêm thất bại");
-                                   reload();
                                    setVisible(false);
                                }
+                   }else if (ae.getSource() == reload) {
+                               reload();
                    }else if(ae.getSource() == edit) {
                                int i = tb_course.getSelectedRow();
                                Course s = new Course();
@@ -325,11 +322,9 @@ public class Management_Course extends JFrame implements ActionListener{
                                if (check == 1) {
                                    setModelValue(s, i);
                                    JOptionPane.showMessageDialog(null, "Sửa thành công");
-                                   reload();
                                }
                                else {
                                JOptionPane.showMessageDialog(null, "Sửa thất bại");
-                               reload();
                                setVisible(false);
                            }
                    } else {

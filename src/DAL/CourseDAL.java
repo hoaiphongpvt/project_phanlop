@@ -73,7 +73,7 @@ public class CourseDAL {
                 qry=qry+"'"+course.getCourseID()+"'";
                 qry=qry+",'"+course.getTitle()+"'";
                 qry=qry+",'"+course.getCredits()+"'";
-                qry=qry+",'"+course.getDepartmentID()+")'";
+                qry=qry+",'"+course.getDepartmentID()+"')";
                 res = my.executeUpdate(qry);
             }catch(Exception e){
                 JOptionPane.showMessageDialog(null,"Lỗi thêm Khóa học vào Database");
@@ -88,7 +88,7 @@ public class CourseDAL {
             String qry = "update course set ";
             qry = qry + "Title='"+tc.getTitle()+"',";
             qry = qry + "Credits='"+tc.getCredits()+"',";
-            qry = qry + "DepartmentID='"+tc.getDepartmentID()+"',";
+            qry = qry + "DepartmentID='"+tc.getDepartmentID()+"'";
             qry = qry +" where CourseID ='"+tc.getCourseID()+"'";
             res = my.executeUpdate(qry);
         }catch(Exception e){
