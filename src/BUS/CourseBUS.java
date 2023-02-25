@@ -56,4 +56,50 @@ public class CourseBUS {
         }
         return find; 
     }    
+            public static ArrayList<Course> timkiem(String key, String query) {
+                ArrayList<Course> temp = new ArrayList<>();
+                CourseDAL data = new CourseDAL();
+                try{
+                ArrayList<Course> s = data.docCourse();
+                if (key.equals("CourseID")) {
+                    for (int i = 0; i < s.size(); i++) {
+                        if (s.get(i).getCourseID().toLowerCase().equals(query)) {
+                            temp.add(s.get(i));
+                        }
+
+                    }
+                    return temp;
+                }
+                if (key.equals("Title")) {
+                    for (int i = 0; i < s.size(); i++) {
+                        if (s.get(i).getTitle().toLowerCase().equals(query)) {
+                            temp.add(s.get(i));
+                        }
+
+                    }
+                    return temp;
+                }
+                if (key.equals("Credits")) {
+                    for (int i = 0; i < s.size(); i++) {
+                        if (s.get(i).getCredits().toLowerCase().equals(query)) {
+                            temp.add(s.get(i));
+                        }
+
+                    }
+                    return temp;
+                }
+                if (key.equals("DepartmentID")) {
+                    for (int i = 0; i < s.size(); i++) {
+                        if (s.get(i).getDepartmentID().toLowerCase().equals(query)) {
+                            temp.add(s.get(i));
+                        }
+
+                    }
+                    return temp;
+                }
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                return null;
+            }    
 }

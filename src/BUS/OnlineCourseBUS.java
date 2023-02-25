@@ -1,42 +1,42 @@
 
 package BUS;
 
-import DAL.CourseInstructorDAL;
-import BLL.CourseInstructor;
+import DAL.OnlineCourseDAL;
+import BLL.OnlineCourse;
 import java.util.ArrayList;
 
-public class CourseInstructorBUS {
-    public static ArrayList<CourseInstructor> list = new ArrayList<>();    
-    public CourseInstructorBUS(){}
-    public ArrayList<CourseInstructor> doc(){
-        CourseInstructorDAL data = new CourseInstructorDAL();
+public class OnlineCourseBUS {
+    public static ArrayList<OnlineCourse> list = new ArrayList<>();    
+    public OnlineCourseBUS(){}
+    public ArrayList<OnlineCourse> doc(){
+        OnlineCourseDAL data = new OnlineCourseDAL();
         try{
-            list = new ArrayList<CourseInstructor>();
+            list = new ArrayList<OnlineCourse>();
             list = data.doc();
         }catch(Exception e){
             e.printStackTrace();
         }
         return list;
     }
-    public int themCourseInstructor(CourseInstructor ci){
-        CourseInstructorDAL data = new CourseInstructorDAL();
+    public int themkhoa(OnlineCourse ci){
+        OnlineCourseDAL data = new OnlineCourseDAL();
         int check = data.them(ci);
         if(check==1)
             list.add(ci);
         return check;
     }
-    public int suaCourseInstructor(CourseInstructor c,int i){
-        CourseInstructorDAL data = new CourseInstructorDAL();
+    public int suaCourseInstructor(OnlineCourse c,int i){
+        OnlineCourseDAL data = new OnlineCourseDAL();
         int check = data.sua(c);
         if(check ==1)
             list.set(i,c);
         return check;
     }
-            public static ArrayList<CourseInstructor> timkiem(String key, String query) {
-                ArrayList<CourseInstructor> temp = new ArrayList<>();
-                CourseInstructorDAL data = new CourseInstructorDAL();
+            public static ArrayList<OnlineCourse> timkiemSanPham(String key, String query) {
+                ArrayList<OnlineCourse> temp = new ArrayList<>();
+                OnlineCourseDAL data = new OnlineCourseDAL();
                 try{
-                ArrayList<CourseInstructor> s = data.doc();
+                ArrayList<OnlineCourse> s = data.doc();
                 if (key.equals("CourseID")) {
                     for (int i = 0; i < s.size(); i++) {
                         if (s.get(i).getCourseID().toLowerCase().equals(query)) {
@@ -46,9 +46,9 @@ public class CourseInstructorBUS {
                     }
                     return temp;
                 }
-                if (key.equals("PersonID")) {
+                if (key.equals("url")) {
                     for (int i = 0; i < s.size(); i++) {
-                        if (s.get(i).getTeacherID().toLowerCase().equals(query)) {
+                        if (s.get(i).getUrl().toLowerCase().equals(query)) {
                             temp.add(s.get(i));
                         }
 

@@ -312,7 +312,7 @@ public class Courseinstructor extends JFrame implements ActionListener{
             String[] header = {"CourseID", "PersonID"};
             DefaultTableModel modelsearch = new DefaultTableModel(header, 0);
             ArrayList<CourseInstructor> s;
-            s = buscourseinstructor.timkiemSanPham(String.valueOf(cbsearch.getSelectedItem()), txt_search.getText().toLowerCase().trim());
+            s = buscourseinstructor.timkiem(String.valueOf(cbsearch.getSelectedItem()), txt_search.getText().toLowerCase().trim());
             if (s.size() != 0) {
                 for (int i = 0; i < s.size(); i++) {
                     Object[] row = {s.get(i).getCourseID(), s.get(i).getTeacherID()

@@ -4,12 +4,15 @@ import BLL.Course;
 import BLL.Department;
 import BUS.CourseBUS;
 import BUS.DepartmentBUS;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.*;
 import java.awt.Button;
 import java.awt.Font;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -19,6 +22,9 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
 public class Management_Course extends JFrame implements ActionListener{
+    
+            ArrayList<Course> arr = new ArrayList<Course>();
+            ArrayList<Course> tempsearch = new ArrayList<Course>();
             CourseBUS bus = new CourseBUS();
     
             JLabel lblcourseID,lblTitlle,lblCredits,lblDepartment;
@@ -26,6 +32,7 @@ public class Management_Course extends JFrame implements ActionListener{
             Button add,edit,cancel,search;
             DefaultTableModel model = new DefaultTableModel();
             JTable tb_course,tb_depart;
+            JComboBox cbsearch;
 
             Random ran = new Random();
             long first4 = Math.abs((ran.nextLong() % 9000L) + 1000L);
@@ -75,6 +82,7 @@ public class Management_Course extends JFrame implements ActionListener{
                 return head;
             }
             
+            //load dữ liệu lên table
             public void loadDepart() {
                 DepartmentBUS bus = new DepartmentBUS();
                 try {
@@ -119,12 +127,18 @@ public class Management_Course extends JFrame implements ActionListener{
                 return s;
             }
             
+            //lấy dữ liệu từ table lên
             public void setModelValue(Course cs, int i) {
                 model.setValueAt(cs.getCourseID(), i, 0);
                 model.setValueAt(cs.getTitle(), i, 1);
                 model.setValueAt(cs.getCredits(), i, 2);
                 model.setValueAt(cs.getDepartmentID(), i, 3);
                 tb_course.setModel(model);
+            }
+            
+            public void setModelValueDepart(Department cs, int i) {
+                model.setValueAt(cs.getDepartID(), i, 0);
+                tb_depart.setModel(model);
             }
     
             Management_Course() {
@@ -178,10 +192,14 @@ public class Management_Course extends JFrame implements ActionListener{
                         txt_departmentid.setFont(new Font("serif", Font.PLAIN, 30));
                         add(txt_departmentid);
                         
-                        JLabel lbltk = new JLabel("Search Title");
-                        lbltk.setBounds(50, 230, 200, 50);
-                        lbltk.setFont(new Font("serif", Font.BOLD, 30));
-                        add(lbltk);
+                        cbsearch = new JComboBox();
+                        cbsearch.setBounds(50, 230, 200, 50);
+                        cbsearch.setFont(new Font("serif", Font.BOLD, 30));
+                        cbsearch.addItem("CourseID");
+                        cbsearch.addItem("DepartmentID");
+                        cbsearch.addItem("Title");
+                        cbsearch.addItem("Credits");
+                        add(cbsearch);
                         
                         search = new Button("Search");
                         search.setBounds(550, 230, 150, 50);
@@ -230,11 +248,17 @@ public class Management_Course extends JFrame implements ActionListener{
                         jsp1.setBounds(800, 350, 470, 410);
                         add(jsp1);
                         
-                    tb_course.addMouseListener(new java.awt.event.MouseAdapter() {
-                            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                tb_Course(evt);
-                            }
-                    });
+                        tb_course.addMouseListener(new java.awt.event.MouseAdapter() {
+                                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                    tb_Course(evt);
+                                }
+                        });
+                        
+                        tb_depart.addMouseListener(new java.awt.event.MouseAdapter() {
+                                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                    tb_Depart(evt);
+                                }
+                        });
                     
                         
                         init();
@@ -251,35 +275,50 @@ public class Management_Course extends JFrame implements ActionListener{
                         }      
                         
             public void actionPerformed(ActionEvent ae) {
-                if (ae.getSource() == add) {
-                    Course cs = getText();
-                    Vector head = setVector(cs);
-                    int check = bus.themCourse(cs);
-                    if(check == 1){ 
-                        JOptionPane.showMessageDialog(null, "Thêm thành công");
-                        setVisible(false);
-                        }else{JOptionPane.showMessageDialog(null, "Mã đã tồn tại. Thêm thất bại");
-                        setVisible(false);
-                    }}
-                    else if(ae.getSource() == edit) {
-                        int i = tb_course.getSelectedRow();
-                        Course s = getText();
-                        int check = bus.suaCourse(s, i);
-                        if (check == 1) {
-                            setModelValue(s, i);
-                            JOptionPane.showMessageDialog(null, "Sửa thành công");
-                        }
-                        else {
-                        JOptionPane.showMessageDialog(null, "Sửa thất bại");
-                    }
-                    }
-                    else if(ae.getSource() == search) {
-                        searchtk();
-                    }
-                    else { 
-                        setVisible(false);
-                    }
-            }
+                if (ae.getSource() == search) {
+                   String[] header = {"CourseID", "DepartmentID","Credits","Title"};
+                   DefaultTableModel modelsearch = new DefaultTableModel(header, 0);
+                   ArrayList<Course> s;
+                   s = bus.timkiem(String.valueOf(cbsearch.getSelectedItem()), txt_tk.getText().toLowerCase().trim());
+                   if (s.size() != 0) {
+                       for (int i = 0; i < s.size(); i++) {
+                           Object[] row = {s.get(i).getCourseID(), s.get(i).getDepartmentID(), s.get(i).getCredits(), s.get(i).getTitle()
+                           };
+                           modelsearch.addRow(row);
+                       }
+                       tempsearch.addAll(arr);
+                       arr.clear();
+                       arr.addAll(s);
+
+                       tb_course.setModel(modelsearch);
+                   } else {
+                       JOptionPane.showMessageDialog(null, "Không có kết quả phù hợp!");
+                   }
+                   }else if (ae.getSource() == add) {
+                               Course cs = getText();
+                               Vector head = setVector(cs);
+                               int check = bus.themCourse(cs);
+                               if(check == 1){ 
+                                   JOptionPane.showMessageDialog(null, "Thêm thành công");
+                                   setVisible(false);
+                                   }else{JOptionPane.showMessageDialog(null, "Mã đã tồn tại. Thêm thất bại");
+                                   setVisible(false);
+                               }
+                   }else if(ae.getSource() == edit) {//lỗi sửa
+                               int i = tb_course.getSelectedRow();
+                               Course s = getText();
+                               int check = bus.suaCourse(s, i);
+                               if (check == 1) {
+                                   setModelValue(s, i);
+                                   JOptionPane.showMessageDialog(null, "Sửa thành công");
+                               }
+                               else {
+                               JOptionPane.showMessageDialog(null, "Sửa thất bại");
+                           }
+                   } else {
+                               setVisible(false);
+                   }
+           }
             
             private void tb_Course(java.awt.event.MouseEvent evt) {                                        
             int i = tb_course.getSelectedRow();
@@ -288,6 +327,13 @@ public class Management_Course extends JFrame implements ActionListener{
                     txt_Title.setText(tb_course.getModel().getValueAt(i, 1).toString());
                     txt_credits.setText(tb_course.getModel().getValueAt(i, 2).toString());
                     txt_departmentid.setText(tb_course.getModel().getValueAt(i, 3).toString());
+                    }
+            }
+            
+            private void tb_Depart(java.awt.event.MouseEvent evt) {                                        
+            int i = tb_depart.getSelectedRow();
+            if (i >= 0) {
+                    txt_departmentid.setText(tb_depart.getModel().getValueAt(i, 0).toString());
                     }
             }
             

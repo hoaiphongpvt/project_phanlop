@@ -1,12 +1,18 @@
 package UI;
 
+import BLL.OnlineCourse;
+import BUS.OnlineCourseBUS;
+import com.mysql.fabric.Response;
 import java.awt.Choice;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.UUID;
+import java.util.Vector;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -14,17 +20,64 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import net.proteanit.sql.DbUtils;
 
 public class Onlinecourse extends JFrame implements ActionListener{
+    
+            ArrayList<OnlineCourse> arr = new ArrayList<OnlineCourse>();
+            ArrayList<OnlineCourse> tempsearch = new ArrayList<OnlineCourse>();
+    
+            DefaultTableModel model = new DefaultTableModel();
+            OnlineCourseBUS bus = new OnlineCourseBUS();
+            
+            Vector header = new Vector();
     
             JTextField tfname,txturl ;
             Choice cCourse;
             JButton btnaddButton,btncancel,btnsubmit,btnsearch;
             JTable table;
-    
+            
+            String randomLink = "https://example.com/" + UUID.randomUUID().toString();
+            
             Random ran = new Random();
             long first4 = Math.abs((ran.nextLong() % 9000L) + 1000L);
+            
+            private void load(){
+                OnlineCourseBUS bus = new OnlineCourseBUS();       
+                try{
+                   bus.doc();
+               }catch(Exception e){
+                   JOptionPane.showMessageDialog(null, "Lỗi kết nối đến Database.");
+                   return;
+               }
+                header = new Vector();
+                header.add("Course ID");
+                header.add("URL");
+                    model = new DefaultTableModel(header,0){
+                    public boolean isCellEditable(int row, int column)
+                        {
+                          return false;
+                        }
+               };	
+               showOnTable(bus.list);
+            }
+
+            private void showOnTable(ArrayList<OnlineCourse> list){
+                model.setRowCount(0);
+                for(OnlineCourse onl:list){
+                   Vector data = setVector(onl);
+                   model.addRow(data);
+               }
+               table.setModel(model);
+            }
+
+            private Vector setVector(OnlineCourse sv){
+                    header = new Vector();
+                    header.add(sv.getCourseID());
+                    header.add(sv.getUrl());
+                    return header;
+            }    
     
     Onlinecourse() {
         setSize(800, 700);
@@ -63,7 +116,7 @@ public class Onlinecourse extends JFrame implements ActionListener{
         lblurl.setFont(new Font("serif", Font.BOLD, 20));
         add(lblurl);
         
-        txturl = new JTextField();
+        txturl = new JTextField(randomLink);
         txturl.setBounds(350, 80, 300, 45);
         txturl.setFont(new Font("serif", Font.BOLD, 20));
         add(txturl);
@@ -94,17 +147,10 @@ public class Onlinecourse extends JFrame implements ActionListener{
         
         table = new JTable();
         
-        try {
-            Conn c = new Conn();
-            ResultSet rs = c.s.executeQuery("select * from onlinecourse");
-            table.setModel(DbUtils.resultSetToTableModel(rs));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
+        load();
         
         JScrollPane jsp = new JScrollPane(table);
-        jsp.setBounds(0, 300, 1000, 500);
+        jsp.setBounds(0, 300, 800, 500);
         add(jsp);
         
         setVisible(true);
