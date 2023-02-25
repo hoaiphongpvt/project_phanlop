@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th2 24, 2023 lúc 03:11 PM
+-- Thời gian đã tạo: Th2 25, 2023 lúc 12:19 PM
 -- Phiên bản máy phục vụ: 10.4.18-MariaDB
 -- Phiên bản PHP: 8.0.3
 
@@ -80,7 +80,9 @@ CREATE TABLE `courseinstructor` (
 --
 
 INSERT INTO `courseinstructor` (`CourseID`, `PersonID`) VALUES
-(1050, 967);
+(1050, 967),
+(1061, 967),
+(2042, 967);
 
 -- --------------------------------------------------------
 
@@ -192,10 +194,13 @@ CREATE TABLE `onlinecourse` (
 --
 
 INSERT INTO `onlinecourse` (`CourseID`, `url`) VALUES
+(1045, 'https://www.fineartschool.net/bd0c788f-6c5f-46dc-a018-d4f5e07f8a0b'),
+(1061, 'https://www.fineartschool.net/d587a502-d599-4465-b670-e3659681983c'),
 (2021, 'http://www.fineartschool.net/Composition'),
 (2030, 'http://www.fineartschool.net/Poetry'),
 (3141, 'http://www.fineartschool.net/Trigonometry'),
-(4041, 'http://www.fineartschool.net/Macroeconomics');
+(4041, 'http://www.fineartschool.net/Macroeconomics'),
+(4061, 'https://www.fineartschool.net/5a77d91f-b361-4aea-9359-987fb5994a77');
 
 -- --------------------------------------------------------
 
