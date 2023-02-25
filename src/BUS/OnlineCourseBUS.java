@@ -18,21 +18,21 @@ public class OnlineCourseBUS {
         }
         return list;
     }
-    public int themkhoa(OnlineCourse ci){
+    public int them(OnlineCourse ci){
         OnlineCourseDAL data = new OnlineCourseDAL();
         int check = data.them(ci);
         if(check==1)
             list.add(ci);
         return check;
     }
-    public int suaCourseInstructor(OnlineCourse c,int i){
+    public int sua(OnlineCourse c,int i){
         OnlineCourseDAL data = new OnlineCourseDAL();
         int check = data.sua(c);
         if(check ==1)
             list.set(i,c);
         return check;
     }
-            public static ArrayList<OnlineCourse> timkiemSanPham(String key, String query) {
+            public static ArrayList<OnlineCourse> timkiem(String key, String query) {
                 ArrayList<OnlineCourse> temp = new ArrayList<>();
                 OnlineCourseDAL data = new OnlineCourseDAL();
                 try{
@@ -46,7 +46,7 @@ public class OnlineCourseBUS {
                     }
                     return temp;
                 }
-                if (key.equals("url")) {
+                if (key.equals("URL")) {
                     for (int i = 0; i < s.size(); i++) {
                         if (s.get(i).getUrl().toLowerCase().equals(query)) {
                             temp.add(s.get(i));

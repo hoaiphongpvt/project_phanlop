@@ -120,15 +120,6 @@ public class Management_Course extends JFrame implements ActionListener{
                 return head;
             }
             
-            public Course getText() {
-                Course s = new Course();
-                s.setCourseID(txt_courseid.getText().trim());
-                s.setTitle(txt_Title.getText().trim());
-                s.setCredits(txt_credits.getText().trim());
-                s.setDepartmentID(txt_departmentid.getText().trim());
-                return s;
-            }
-            
             //lấy dữ liệu từ table lên
             public void setModelValue(Course cs, int i) {
                 model.setValueAt(cs.getCourseID(), i, 0);
@@ -309,8 +300,11 @@ public class Management_Course extends JFrame implements ActionListener{
                        JOptionPane.showMessageDialog(null, "Không có kết quả phù hợp!");
                    }
                    }else if (ae.getSource() == add) {
-                               Course cs = getText();
-                               Vector head = setVector(cs);
+                               Course cs = new Course();
+                               cs.setCourseID(txt_courseid.getText());
+                               cs.setTitle(txt_Title.getText());
+                               cs.setCredits(txt_credits.getText());
+                               cs.setDepartmentID(txt_departmentid.getText());
                                int check = bus.themCourse(cs);
                                if(check == 1){ 
                                    JOptionPane.showMessageDialog(null, "Thêm thành công");
@@ -322,7 +316,11 @@ public class Management_Course extends JFrame implements ActionListener{
                                }
                    }else if(ae.getSource() == edit) {
                                int i = tb_course.getSelectedRow();
-                               Course s = getText();
+                               Course s = new Course();
+                               s.setCourseID(txt_courseid.getText());
+                               s.setTitle(txt_Title.getText());
+                               s.setCredits(txt_credits.getText());
+                               s.setDepartmentID(txt_departmentid.getText());
                                int check = bus.suaCourse(s, i);
                                if (check == 1) {
                                    setModelValue(s, i);

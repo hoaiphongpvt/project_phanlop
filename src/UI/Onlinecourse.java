@@ -1,6 +1,8 @@
 package UI;
 
+import BLL.Course;
 import BLL.OnlineCourse;
+import BUS.CourseBUS;
 import BUS.OnlineCourseBUS;
 import com.mysql.fabric.Response;
 import java.awt.Choice;
@@ -14,6 +16,7 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.Vector;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -31,14 +34,16 @@ public class Onlinecourse extends JFrame implements ActionListener{
             DefaultTableModel model = new DefaultTableModel();
             OnlineCourseBUS bus = new OnlineCourseBUS();
             
+            CourseBUS busc = new CourseBUS();
+            
             Vector header = new Vector();
     
-            JTextField tfname,txturl ;
-            Choice cCourse;
-            JButton btnaddButton,btncancel,btnsubmit,btnsearch;
-            JTable table;
+            JTextField tfname,txturl,txtsearch,txtCourseID;
+            JButton btnaddButton,btncancel,btnsubmit,btnsearch,reload;
+            JTable tableOnl,tableCourse;
+            JComboBox cbsearch;
             
-            String randomLink = "https://example.com/" + UUID.randomUUID().toString();
+            String randomLink = "https://www.fineartschool.net/" + UUID.randomUUID().toString();
             
             Random ran = new Random();
             long first4 = Math.abs((ran.nextLong() % 9000L) + 1000L);
@@ -69,7 +74,7 @@ public class Onlinecourse extends JFrame implements ActionListener{
                    Vector data = setVector(onl);
                    model.addRow(data);
                }
-               table.setModel(model);
+               tableOnl.setModel(model);
             }
 
             private Vector setVector(OnlineCourse sv){
@@ -78,6 +83,53 @@ public class Onlinecourse extends JFrame implements ActionListener{
                     header.add(sv.getUrl());
                     return header;
             }    
+            
+            private void loadcourse(){
+                CourseBUS busc = new CourseBUS();       
+                try{
+                   busc.docCourse();
+               }catch(Exception e){
+                   JOptionPane.showMessageDialog(null, "Lỗi kết nối đến Database.");
+                   return;
+               }
+                header = new Vector();
+                header.add("Course ID");
+                header.add("Title");
+                    model = new DefaultTableModel(header,0){
+                    public boolean isCellEditable(int row, int column)
+                        {
+                          return false;
+                        }
+               };	
+               showOnTablecourse(busc.list);
+            }
+
+            private void showOnTablecourse(ArrayList<Course> list){
+                model.setRowCount(0);
+                for(Course cs:list){
+                   Vector data = setVectorcourse(cs);
+                   model.addRow(data);
+               }
+               tableCourse.setModel(model);
+            }
+
+            private Vector setVectorcourse(Course csCourse){
+                    header = new Vector();
+                    header.add(csCourse.getCourseID());
+                    header.add(csCourse.getTitle());
+                    return header;
+            }   
+            
+            public void setModelValuec(Course cs, int i) {
+                model.setValueAt(cs.getCourseID(), i, 0);
+                tableCourse.setModel(model);
+            }
+            
+            public void setModelValue(OnlineCourse cs, int i) {
+                model.setValueAt(cs.getCourseID(), i, 0);
+                model.setValueAt(cs.getUrl(), i, 1);
+                tableOnl.setModel(model);
+            }
     
     Onlinecourse() {
         setSize(800, 700);
@@ -96,20 +148,10 @@ public class Onlinecourse extends JFrame implements ActionListener{
         lblname.setFont(new Font("serif", Font.BOLD, 20));
         add(lblname);
         
-        cCourse = new Choice();
-        cCourse.setBounds(150, 90, 100, 60);
-        cCourse.setFont(new Font("serif", Font.BOLD, 20));
-        add(cCourse);
-        
-        try {
-            Conn c = new Conn();
-            ResultSet rs = c.s.executeQuery("select * from course");
-            while(rs.next()) {
-                cCourse.add(rs.getString("CourseID"));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        txtCourseID = new JTextField();
+        txtCourseID.setBounds(150, 90, 100, 30);
+        txtCourseID.setFont(new Font("serif", Font.BOLD, 20));
+        add(txtCourseID);
         
         JLabel lblurl = new JLabel("URL");
         lblurl.setBounds(300, 80, 100, 45);
@@ -121,82 +163,144 @@ public class Onlinecourse extends JFrame implements ActionListener{
         txturl.setFont(new Font("serif", Font.BOLD, 20));
         add(txturl);
         
+        cbsearch = new JComboBox();
+        cbsearch.setBounds(50, 170, 200, 40);
+        cbsearch.setFont(new Font("serif", Font.BOLD, 20));
+        cbsearch.addItem("CourseID");
+        cbsearch.addItem("URL");
+        add(cbsearch);
+        
+        txtsearch = new JTextField();
+        txtsearch.setBounds(260, 170, 200, 40);
+        txtsearch.setFont(new Font("serif", Font.BOLD, 20));
+        add(txtsearch);
+        
+        reload = new JButton("Reload");
+        reload.setBounds(500, 170, 100, 50);
+        reload.addActionListener(this);
+        reload.setFont(new Font("serif", Font.BOLD, 20));
+        add(reload);
+        
         btnaddButton = new JButton("Add");
-        btnaddButton.setBounds(50, 170, 100, 50);
+        btnaddButton.setBounds(50, 230, 100, 50);
         btnaddButton.addActionListener(this);
         btnaddButton.setFont(new Font("serif", Font.BOLD, 20));
         add(btnaddButton);
         
         btnsubmit = new JButton("Submit");
-        btnsubmit.setBounds(200, 170, 100, 50);
+        btnsubmit.setBounds(200, 230, 100, 50);
         btnsubmit.addActionListener(this);
         btnsubmit.setFont(new Font("serif", Font.BOLD, 20));
         add(btnsubmit);
         
         btnsearch = new JButton("Search");
-        btnsearch.setBounds(350, 170, 100, 50);
+        btnsearch.setBounds(350, 230, 100, 50);
         btnsearch.addActionListener(this);
         btnsearch.setFont(new Font("serif", Font.BOLD, 20));
         add(btnsearch);
         
         btncancel = new JButton("Cancel");
-        btncancel.setBounds(500, 170, 100, 50);
+        btncancel.setBounds(500, 230, 100, 50);
         btncancel.addActionListener(this);
         btncancel.setFont(new Font("serif", Font.BOLD, 20));
         add(btncancel);
         
-        table = new JTable();
+        tableOnl = new JTable();
         
         load();
         
-        JScrollPane jsp = new JScrollPane(table);
-        jsp.setBounds(400, 300, 800, 500);
+        JScrollPane jsp = new JScrollPane(tableOnl);
+        jsp.setBounds(200, 300, 580, 500);
         add(jsp);
+        
+        tableCourse = new JTable();
+        
+        loadcourse();
+        
+        JScrollPane jsp1 = new JScrollPane(tableCourse);
+        jsp1.setBounds(0, 300, 200, 500);
+        add(jsp1);
+        
+            tableCourse.addMouseListener(new java.awt.event.MouseAdapter() {
+                                   public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                       tb_Course(evt);
+                                   }
+            });
+            
+            tableOnl.addMouseListener(new java.awt.event.MouseAdapter() {
+                                   public void mouseClicked(java.awt.event.MouseEvent evt) {
+                                       tb_OnlineCourse(evt);
+                                   }
+            });
         
         setVisible(true);
         
     }
     
     public void actionPerformed(ActionEvent ae) {
-         if (ae.getSource() == btnsearch) {
-            String query = "select * from onlinecourse where CourseID = '"+cCourse.getSelectedItem()+"'";
-            try {
-                Conn c = new Conn();
-                ResultSet rs = c.s.executeQuery(query);
-                table.setModel(DbUtils.resultSetToTableModel(rs));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }  else if (ae.getSource() == btnaddButton) {
-            String courseid = cCourse.getSelectedItem();
-            String url = txturl.getText();
-            try {
-                String query = "insert into onlinecourse values('"+courseid+"', '"+url+"')";
-
-                Conn con = new Conn();
-                con.s.executeUpdate(query);
-                
-                JOptionPane.showMessageDialog(null, "Online course details Inserted Successfully");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else if (ae.getSource() == btnsubmit) {
-            String courseid = cCourse.getSelectedItem();
-            String url = txturl.getText();
-            try {
-                String query = "update onlinecourse set CourseID='"+courseid+"', url='"+url+"' where CourseID='"+courseid+"'";
-                Conn con = new Conn();
-                con.s.executeUpdate(query);
-                
-                JOptionPane.showMessageDialog(null, "Online course details Updated Successfully");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            setVisible(false);
-        }
+            if (ae.getSource() == btnsearch) {
+                      String[] header = {"CourseID", "URL"};
+                      DefaultTableModel modelsearch = new DefaultTableModel(header, 0);
+                      ArrayList<OnlineCourse> s;
+                      s = bus.timkiem(String.valueOf(cbsearch.getSelectedItem()), txtsearch.getText().toLowerCase().trim());
+                      if (s.size() != 0) {
+                          for (int i = 0; i < s.size(); i++) {
+                              Object[] row = {s.get(i).getCourseID(), s.get(i).getUrl()
+                              };
+                              modelsearch.addRow(row);
+                          }
+                          tempsearch.addAll(arr);
+                          arr.clear();
+                          arr.addAll(s);
+                          tableOnl.setModel(modelsearch);
+                      } else {
+                          JOptionPane.showMessageDialog(null, "Không có kết quả phù hợp!");
+                      }
+                      }else if (ae.getSource() == btnaddButton) {
+                                  OnlineCourse cs = new OnlineCourse();
+                                  cs.setCourseID(txtCourseID.getText());
+                                  cs.setUrl(txturl.getText());
+                                  int check = bus.them(cs);
+                                  if(check == 1){ 
+                                      JOptionPane.showMessageDialog(null, "Thêm thành công");
+                                      setVisible(false);
+                                      }else{JOptionPane.showMessageDialog(null, "Thêm thất bại");
+                                      setVisible(false);
+                                  }
+                      }else if(ae.getSource() == btnsubmit) {
+                                  int i = tableOnl.getSelectedRow();
+                                  OnlineCourse s = new OnlineCourse();
+                                  s.setCourseID(txtCourseID.getText());
+                                  s.setUrl(txturl.getText());
+                                  int check = bus.sua(s, i);
+                                  if (check == 1) {
+                                      setModelValue(s, i);
+                                      JOptionPane.showMessageDialog(null, "Sửa thành công");
+                                  }
+                                  else {
+                                  JOptionPane.showMessageDialog(null, "Sửa thất bại");
+                                  setVisible(false);
+                              }
+                      } else {
+                                  setVisible(false);
+                        }
     }
 
+            private void tb_Course(java.awt.event.MouseEvent evt) {                                        
+                        int i = tableCourse.getSelectedRow();
+                        if (i >= 0) {
+                                txtCourseID.setText(tableCourse.getModel().getValueAt(i, 0).toString());
+                        }
+            }
+            
+            private void tb_OnlineCourse(java.awt.event.MouseEvent evt) {                                        
+                        int i = tableOnl.getSelectedRow();
+                        if (i >= 0) {
+                                txtCourseID.setText(tableOnl.getModel().getValueAt(i, 0).toString());
+                                txturl.setText(tableOnl.getModel().getValueAt(i, 1).toString());
+                        }
+            }
+    
     public static void main(String[] args) {
         new Onlinecourse();
     }

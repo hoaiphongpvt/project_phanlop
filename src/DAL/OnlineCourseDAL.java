@@ -13,7 +13,7 @@ public class OnlineCourseDAL {
     public ArrayList<OnlineCourse> doc() throws Exception{
         ArrayList<OnlineCourse> list = new ArrayList<OnlineCourse>();
         try{
-                String qry = "select * from courseinstructor";
+                String qry = "select * from onlinecourse";
                 ResultSet rs = my.executeQuery(qry);
                 while(rs.next()){
                     OnlineCourse cI = new OnlineCourse();
