@@ -99,4 +99,16 @@ public class TeacherDAL {
         }
         return res;
     }
+    
+    public int xoaTC(String id){
+        int res = 0;
+        try{
+            String qry = "DELETE FROM teacher WHERE empId ='"+id+"'";
+            System.out.print(qry);
+            res = my.executeUpdate(qry);
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null,"Lỗi xóa Giáo viên trong Database");
+        }
+        return res;
+    }
 }

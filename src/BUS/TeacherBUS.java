@@ -44,6 +44,15 @@ public class TeacherBUS {
             list.set(i,tc);
         return check;
     }
+    
+    public int xoaTC(String id, int i) {
+        TeacherDAL data = new TeacherDAL();
+        int check = data.xoaTC(id);
+        if(check ==1)
+            list.remove(i);
+        return check;
+    }
+    
     public ArrayList<Teacher> timkiemtongquan(String tim){
         ArrayList<Teacher> find = new ArrayList<>();
         for(Teacher tc: list){

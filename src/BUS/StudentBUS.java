@@ -3,6 +3,8 @@ package BUS;
 
 import DAL.StudentDAL;
 import BLL.Student;
+import static BUS.TeacherBUS.list;
+import DAL.TeacherDAL;
 import java.util.ArrayList;
 
 public class StudentBUS {
@@ -30,6 +32,14 @@ public class StudentBUS {
         int check = data.suaSV(sv);
         if(check ==1)
             list.set(i,sv);
+        return check;
+    }
+    
+    public int xoaSV(String id, int i) {
+        StudentDAL data = new StudentDAL();
+        int check = data.xoaSV(id);
+        if(check ==1)
+            list.remove(i);
         return check;
     }
     public ArrayList<Student> timkiemtongquan(String tim){

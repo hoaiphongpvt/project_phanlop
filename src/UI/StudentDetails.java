@@ -18,7 +18,7 @@ public class StudentDetails extends JFrame implements ActionListener {
 
     Choice crollno;
     JTable table;
-    JButton search, print, update, add, cancel;
+    JButton search, print, update, add, delete, cancel;
     
     private void load(){
         StudentBUS bus = new StudentBUS();       
@@ -111,8 +111,13 @@ public class StudentDetails extends JFrame implements ActionListener {
         update.addActionListener(this);
         add(update);
         
+        delete = new JButton("Delete");
+        delete.setBounds(420, 70, 80, 20);
+        delete.addActionListener(this);
+        add(delete);
+        
         cancel = new JButton("Cancel");
-        cancel.setBounds(420, 70, 80, 20);
+        cancel.setBounds(520, 70, 80, 20);
         cancel.addActionListener(this);
         add(cancel);
         
@@ -145,6 +150,22 @@ public class StudentDetails extends JFrame implements ActionListener {
         } else if (ae.getSource() == update) {
             setVisible(false);
             new UpdateStudent();
+        }else if (ae.getSource() == delete) {
+            setVisible(false);
+            int index = table.getSelectedRow();
+            String ID = table.getValueAt(index, 0).toString();
+            int option = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa sinh viên này không?");
+            if (option == JOptionPane.YES_OPTION) {
+                int check = bus.xoaSV(ID, index);
+                if(check == 1){ 
+                    JOptionPane.showMessageDialog(null, "Xóa thành công");
+                    setVisible(false);
+                }else{JOptionPane.showMessageDialog(null, "Xóa thất bại");
+                    setVisible(false);
+                }
+            } else {
+                // Xử lý khi người dùng chọn No hoặc Cancel
+            } 
         } else {
             setVisible(false);
         }

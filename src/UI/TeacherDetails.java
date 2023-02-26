@@ -9,6 +9,8 @@ import net.proteanit.sql.DbUtils;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Vector;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 public class TeacherDetails extends JFrame implements ActionListener {
@@ -18,7 +20,7 @@ public class TeacherDetails extends JFrame implements ActionListener {
 
     Choice cEmpId;
     JTable table;
-    JButton search, print, update, add, cancel;
+    JButton search, print, update, delete, add, cancel;
     
     private void load(){
         TeacherBUS bus = new TeacherBUS();       
@@ -112,8 +114,13 @@ public class TeacherDetails extends JFrame implements ActionListener {
         update.addActionListener(this);
         add(update);
         
+        delete = new JButton("Delete");
+        delete.setBounds(420, 70, 80, 20);
+        delete.addActionListener(this);
+        add(delete);
+        
         cancel = new JButton("Cancel");
-        cancel.setBounds(420, 70, 80, 20);
+        cancel.setBounds(520, 70, 80, 20);
         cancel.addActionListener(this);
         add(cancel);
         
@@ -144,6 +151,24 @@ public class TeacherDetails extends JFrame implements ActionListener {
         } else if (ae.getSource() == update) {
             setVisible(false);
             new UpdateTeacher();
+        }  else if (ae.getSource() == delete) {
+            
+            int index = table.getSelectedRow();
+            String ID = table.getValueAt(index, 0).toString();
+            int option = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa giáo viên này không?");
+            if (option == JOptionPane.YES_OPTION) {
+                int check = bus.xoaTC(ID, index);
+                if(check == 1){ 
+                    JOptionPane.showMessageDialog(null, "Xóa thành công");
+                    setVisible(false);
+                }else{JOptionPane.showMessageDialog(null, "Xóa thất bại");
+                    setVisible(false);
+                }
+            } else {
+                // Xử lý khi người dùng chọn No hoặc Cancel
+            } 
+            setVisible(false);
+            //new DeleteTeacher();
         } else {
             setVisible(false);
         }
